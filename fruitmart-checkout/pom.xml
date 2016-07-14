@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.capgemini.preinterview.exercise</groupId>
 	<artifactId>fruitmart-checkout</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>FruitMarketCheckoutSystem</name>
+	<version>1.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,4 +69,5 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 </project>
