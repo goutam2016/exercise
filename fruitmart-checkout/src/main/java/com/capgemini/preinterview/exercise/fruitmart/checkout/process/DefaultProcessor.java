@@ -10,6 +10,12 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+/**
+ * Default implementation of <code>Processor</code> interface.
+ * 
+ * @author goutam.bhattacharjee
+ *
+ */
 @Component
 public class DefaultProcessor implements Processor {
 
@@ -17,10 +23,13 @@ public class DefaultProcessor implements Processor {
 
 	@Resource
 	private PropertiesProvider propertiesProvider;
+	
+	@Resource
+	private PromotionalOfferHandler promotionalOfferHandler;
 
 	@Override
-	public PurchaseSummary compute(Map<String, Integer> countPerItem) {
-		PurchaseSummary purchaseSummary = new PurchaseSummary();
+	public ShoppingCart compute(Map<String, Integer> countPerItem) {
+		ShoppingCart shoppingCart = new ShoppingCart();
 		BigDecimal grossPriceInPence = BigDecimal.ZERO;
 		
 		Set<Entry<String, Integer>> countPerItemEntries = countPerItem.entrySet();
@@ -31,14 +40,20 @@ public class DefaultProcessor implements Processor {
 			BigDecimal pencePerUnit = propertiesProvider.getPencePerUnit(itemName);
 			BigDecimal pencePerItem = pencePerUnit.multiply(BigDecimal.valueOf(count.longValue()));
 			grossPriceInPence = grossPriceInPence.add(pencePerItem);
-			purchaseSummary.addOriginalItemsSelected(itemName, count);
+			shoppingCart.addOriginalItemsSelected(itemName, count);
+			shoppingCart.addFinalItems(itemName, count);
 		}
 		
 		BigDecimal grossPriceInPound = grossPriceInPence.divide(BigDecimal.valueOf(100));
-		purchaseSummary.setGrossPrice(grossPriceInPound);
-		purchaseSummary.setNetPrice(grossPriceInPound);
+		shoppingCart.setGrossPrice(grossPriceInPound);
+		shoppingCart.setNetPrice(grossPriceInPound);
 		
-		return purchaseSummary;
+		LOGGER.info(String.format("Calculated gross price: GBP %s", grossPriceInPound));
+		LOGGER.info("Applying promotional offers...");
+		
+		promotionalOfferHandler.applyOffers(shoppingCart);
+		
+		return shoppingCart;
 	}
 
 }

@@ -5,16 +5,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-public class PurchaseSummary {
+public class ShoppingCart {
 	private Map<String, Integer> originalItemsSelected;
 	private Map<String, Integer> additionalItemsOffered;
+	private Map<String, Integer> finalItems;
 	private BigDecimal grossPrice;
 	private BigDecimal discount;
 	private BigDecimal netPrice;
 
-	PurchaseSummary() {
+	ShoppingCart() {
 		originalItemsSelected = new HashMap<>();
 		additionalItemsOffered = new HashMap<>();
+		finalItems = new HashMap<>();
 		grossPrice = BigDecimal.ZERO;
 		discount = BigDecimal.ZERO;
 		netPrice = BigDecimal.ZERO;
@@ -52,6 +54,23 @@ public class PurchaseSummary {
 		BiFunction<Integer, Integer, Integer> itemCountUpdater = (Integer existingCount,
 				Integer newCount) -> existingCount.intValue() + newCount.intValue();
 		additionalItemsOffered.merge(itemName, count, itemCountUpdater);
+	}
+	
+	public Map<String, Integer> getFinalItems() {
+		return finalItems;
+	}
+	
+	public void setFinalItems(Map<String, Integer> finalItems) {
+		this.finalItems = finalItems;
+	}
+
+	public void addFinalItems(String itemName, Integer count) {
+		if (finalItems == null) {
+			finalItems = new HashMap<>();
+		}
+		BiFunction<Integer, Integer, Integer> itemCountUpdater = (Integer existingCount,
+				Integer newCount) -> existingCount.intValue() + newCount.intValue();
+		finalItems.merge(itemName, count, itemCountUpdater);
 	}
 
 	public BigDecimal getGrossPrice() {
