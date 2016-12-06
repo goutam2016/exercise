@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.gb.sample.web</groupId>
+	<artifactId>simple-greet</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>SimpleGreet</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.7</java.version>
+		<maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
+		<maven.war.plugin.version>2.4</maven.war.plugin.version>
+		<log4j.version>1.2.17</log4j.version>
+		<tomcat7.plugin.version>2.2</tomcat7.plugin.version>
+		<tomcat.username>tc_admin</tomcat.username>
+		<tomcat.password>passw0rd</tomcat.password>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.0.7.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<!-- <scope>provided</scope> -->
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>simple-greet</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven.war.plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>${tomcat7.plugin.version}</version>
+				<configuration>
+					<url>http://localhost:8080/manager/text</url>
+					<update>true</update>
+				</configuration>
+			</plugin>
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>7.6.Final</version>
+                <configuration>
+                	<hostname>localhost</hostname>
+                	<port>${port}</port>
+                	<username>admin</username>
+                	<!-- <password>${password}</password> -->
+                	<!-- <domain/> element needed only if JBoss is running in domain mode. -->
+                	
+                	<domain>
+                		<server-groups>
+                			<server-group>other-server-group</server-group>
+                		</server-groups>
+                	</domain>
+                	
+                </configuration>
+            </plugin>			
+		</plugins>
+	</build>
+
+</project>
